@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    margin: 0;
+    border: 0;
+}
+
+body {
+    background-color: #3b4664;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    margin-top: 120px;
+    font-family: "Roboto", sans-serif;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    min-width: 420px;
+    gap: 20px;
+}
+
+.display,
+.calculator-body {
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.display {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 40px;
+    background-color: #181f32;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.calculator-body {
+    background-color: #252d44;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.button-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.regular-button,
+#del-button {
+    width: 80px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.regular-button {
+    background-color: #eae3db;
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
+.regular-button:hover {
+    cursor: pointer;
+}
+
+#del-button,
+#reset-button {
+    background-color: #647298;
+    color: #fcffff;
+    font-weight: 600;    
+}
+
+#reset-button,
+#equals-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    height: 40px;
+    flex: 1;
+}
+
+#reset-button {
+    margin-right: 20px;
+}
+
+
+#equals-button {
+    background-color: #d13f30;
+}
+
+
+
