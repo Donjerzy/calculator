@@ -67,7 +67,8 @@ body {
     font-weight: bolder;
 }
 
-.regular-button:hover {
+.regular-button:hover,
+#del-button {
     cursor: pointer;
 }
 
@@ -88,10 +89,14 @@ body {
     flex: 1;
 }
 
+#reset-button:hover,
+#equals-button:hover {
+    cursor: pointer;
+}
+
 #reset-button {
     margin-right: 20px;
 }
-
 
 #equals-button {
     background-color: #d13f30;
