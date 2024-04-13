@@ -73,10 +73,251 @@ function validDotPosition() {
     return true;
 }
 
+function containsDivision(str) {
+    for(let i = 0; i<str.length; i++) {
+        if(str[i]==='/') {
+            return true;
+        }
+    }
+    return false
+}
+
+function containsMultiplication(str) {
+    for(let i = 0; i<str.length; i++) {
+        if(str[i]==='x') {
+            return true;
+        }
+    }
+    return false
+}
+
+function containsAddition(str) {
+    for(let i = 0; i<str.length; i++) {
+        if(str[i]==='+') {
+            return true;
+        }
+    }
+    return false
+}
+
+function containsSubraction(str) {
+    const arr = str.split('-');
+    if(arr.length > 1 && arr[0]!== '') {
+        return true;
+    }
+    let noOfSubtractions = 0
+    for(let i = 0; i<str.length; i++) {
+        if(str[i]==='-') {
+            noOfSubtractions += 1;
+            if(noOfSubtractions==2) {
+                return true;
+            }
+        }
+    }
+    return false
+}
+
 function calculate(expression) {
-    console.log(`Received ${expression}`);
-    let sample = 69;
-    return sample;
+    //MAS
+    let current = expression;
+    let aStart;
+    let aEnd;
+    let bStart;
+    let bEnd;
+    let operator;
+    while(containsDivision(current)) {
+        let result = undefined;
+        for(let i = 0; i<current.length; i++) {
+            if(current[i]==='/') {
+                operator = i;
+                break;
+            }
+        }
+        bStart = operator + 1;
+        aEnd = operator;
+        for(let y = operator + 1; y<current.length; y++) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                bEnd = y;
+                break;
+            }
+            if(y === current.length - 1) {
+                bEnd = current.length;
+            }
+        }
+        for(let y = operator - 1; y>=0; y--) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                aStart = y+1;
+                break;
+            }
+            if(y === 0) {
+                aStart = 0;
+            }
+        }
+        result = operate(parseFloat(current.slice(aStart, aEnd)), 
+                        parseFloat(current.slice(bStart, bEnd)),
+                        'divide');
+        let newCurrent = '';
+        let resultAdded = false;
+        for(i=0;i<current.length;i++) {
+            if(i<aStart) {
+                newCurrent += current[i];
+            } else if(i>=bEnd) {
+                newCurrent += current[i];
+            } else if (i>=aStart && i<bEnd && !resultAdded ) {
+                newCurrent+= result;
+                resultAdded = true;
+            }
+        }
+        current = newCurrent;
+    }
+    while(containsMultiplication(current)) {
+        let result = undefined;
+        for(let i = 0; i<current.length; i++) {
+            if(current[i]==='x') {
+                operator = i;
+                break;
+            }
+        }
+        bStart = operator + 1;
+        aEnd = operator;
+        for(let y = operator + 1; y<current.length; y++) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                bEnd = y;
+                break;
+            }
+            if(y === current.length - 1) {
+                bEnd = current.length;
+            }
+        }
+        for(let y = operator - 1; y>=0; y--) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                aStart = y+1;
+                break;
+            }
+            if(y === 0) {
+                aStart = 0;
+            }
+        }
+        result = operate(parseFloat(current.slice(aStart, aEnd)), 
+                        parseFloat(current.slice(bStart, bEnd)),
+                        'multiply');
+        let newCurrent = '';
+        let resultAdded = false;
+        for(i=0;i<current.length;i++) {
+            if(i<aStart) {
+                newCurrent += current[i];
+            } else if(i>=bEnd) {
+                newCurrent += current[i];
+            } else if (i>=aStart && i<bEnd && !resultAdded ) {
+                newCurrent+= result;
+                resultAdded = true;
+            }
+        }
+        current = newCurrent;
+    }
+    while(containsAddition(current)) {
+        let result = undefined;
+        for(let i = 0; i<current.length; i++) {
+            if(current[i]==='+') {
+                operator = i;
+                break;
+            }
+        }
+        bStart = operator + 1;
+        aEnd = operator;
+        for(let y = operator + 1; y<current.length; y++) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                bEnd = y;
+                break;
+            }
+            if(y === current.length - 1) {
+                bEnd = current.length;
+            }
+        }
+        for(let y = operator - 1; y>=0; y--) {
+            if(current[y] === '+' || current[y] === '/' ||  current[y] === 'x') {
+                aStart = y+1;
+                break;
+            }
+            if(current[y] === '-') {
+                aStart = y;
+                break;
+            }
+            if(y === 0) {
+                aStart = 0;
+            }
+        }
+        result = operate(parseFloat(current.slice(aStart, aEnd)), 
+                        parseFloat(current.slice(bStart, bEnd)),
+                        'add');
+        let newCurrent = '';
+        let resultAdded = false;
+        for(i=0;i<current.length;i++) {
+            if(i === aStart) {
+                newCurrent+= result;
+                resultAdded = true;
+            } else if(i<aStart) {
+                newCurrent += current[i];
+            } else if(i>=bEnd) {
+                newCurrent += current[i];
+            } else if (i>=aStart && i<bEnd && !resultAdded ) {
+                newCurrent+= result;
+                resultAdded = true;
+            }
+        }
+        current = newCurrent;
+    }
+    while(containsSubraction(current)) {
+        let result = undefined;
+        for(let i = 0; i<current.length; i++) {
+            if(current[i]==='-' && i!==0) {
+                operator = i;
+                break;
+            }
+        }
+        bStart = operator + 1;
+        aEnd = operator;
+        for(let y = operator + 1; y<current.length; y++) {
+            if(current[y] === '+' || current[y] === '-' || current[y] === '/' ||  current[y] === 'x') {
+                bEnd = y;
+                break;
+            }
+            if(y === current.length - 1) {
+                bEnd = current.length;
+            }
+        }
+        for(let y = operator - 1; y>=0; y--) {
+            if(current[y] === '+' ||  current[y] === '/' ||  current[y] === 'x') {
+                aStart = y+1;
+                break;
+            }
+            if(y === 0) {
+                aStart = 0;
+            }
+        }
+        aStart = aStart || 0;
+        // console.log(`A start = ${aStart}`)
+        // console.log(`A end = ${aEnd}`)
+        // console.log(`Num 1 ==== '${parseFloat(current.slice(aStart, aEnd))}`)
+        // console.log(`Num 2 ==== '${parseFloat(current.slice(bStart, bEnd))}`)
+        result = operate(parseFloat(current.slice(aStart, aEnd)), 
+                        parseFloat(current.slice(bStart, bEnd)),
+                        'subtract');
+        let newCurrent = '';
+        let resultAdded = false;
+        for(i=0;i<current.length;i++) {
+            if(i<aStart) {
+                newCurrent += current[i];
+            } else if(i>=bEnd) {
+                newCurrent += current[i];
+            } else if (i>=aStart && i<bEnd && !resultAdded ) {
+                newCurrent+= result;
+                resultAdded = true;
+            }
+        }
+        current = newCurrent;
+    }
+    return current;
 }
 
 function containsOperator() {
@@ -106,7 +347,7 @@ function modifyDisplayValue(value, action) {
             break;
         case 'add-operator':
             prev = displayValue[displayValue.length - 1];
-            if(prev !== '+' && prev !== '.' && prev !== '-' && prev !== '/' &&  prev !== 'x') {
+            if(prev !== '+' && prev !== '.' && prev !== '-' && prev !== '/' &&  prev !== 'x' && prev !== undefined) {
                 displayValue += value;
                 displayScreen.textContent = displayValue; 
             }
